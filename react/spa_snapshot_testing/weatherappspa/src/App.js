@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Link, Route, useHistory } from 'react-router-dom';
 import { getWeather } from './getData';
 
 function WeatherApp() {
@@ -14,7 +14,7 @@ function WeatherApp() {
     if (url.split('/').length === 4) {
       urlCity = url.split('/').pop();
     }
-    let location = city; 
+    let location = city;
     if (urlCity !== '' && city === '') {
       location = urlCity;
     }
@@ -30,6 +30,7 @@ function WeatherApp() {
     }
   }, [city]);
 
+  const history = useHistory();
   const updateCity = (loc) => {
     if (loc) {
       // update city triggered by a click on a link
@@ -38,6 +39,7 @@ function WeatherApp() {
     } else { // homepage + button
       // Lecture Activity: update city triggered by a button click (search box)
       // Update the URL in the address bar to be /{the_city}
+      history.push(`/${city}`);
     }
   };
 
