@@ -9,7 +9,7 @@ const connect = async () => {
       password: 'cis557+mysql',
       database: 'game_test',
     });
-      // Connected to db
+    // Connected to db
     console.log(`Connected to database: ${connection.connection.config.database}`);
     return connection;
   } catch (err) {
@@ -53,12 +53,23 @@ const deletePlayer = async (db, name) => {
 };
 
 // update a player - lecture activity
+const updatePlayer = async (db, name, newInfo) => {
+  const params = [newInfo.player, newInfo.points, name];
+  try {
+    const query = 'UPDATE game_test.players SET player=?, points=? WHERE player=?';
+    const [row] = await db.execute(query, params);
+    console.log(`Updated ${JSON.stringify(row.affectedRows)} player(s)`);
+  } catch (err) {
+    console.log(`error: ${err.message}`);
+  }
+};
 
 const operations = async () => {
   const db = await connect();
   await getPlayers(db);
   addPlayer(db, { player: 'testuser', points: 0 });
   await getPlayers(db);
+  await updatePlayer(db, 'testuser', { player: 'testuser', points: 1 });
   await deletePlayer(db, 'testuser');
   await getPlayers(db);
 };
